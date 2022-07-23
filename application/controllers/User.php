@@ -27,7 +27,7 @@ class User extends CI_Controller {
 
     public function list()
     {
-        $data['title'] = 'List Users';
+        $data['title'] = 'User';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->load->model('User_model', 'list');

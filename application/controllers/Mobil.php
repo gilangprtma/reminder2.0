@@ -8,6 +8,7 @@ class Mobil extends CI_Controller {
         parent::__construct();
         $this->load->model('Mobil_model');
         $this->load->helper('tgl_indo');
+        //$this->load->library(array('excel','session'));
         is_logged_in();
     }
 
@@ -88,4 +89,40 @@ class Mobil extends CI_Controller {
     {
         $this->Mobil_model->deletemobil($id);
     }
+
+    //public function import_excel(){
+	//	if (isset($_FILES["fileExcel"]["name"])) {
+	//		$path = $_FILES["fileExcel"]["tmp_name"];
+	//		$object = PHPExcel_IOFactory::load($path);
+	//		foreach($object->getWorksheetIterator() as $worksheet)
+	//		{
+	//			$highestRow = $worksheet->getHighestRow();
+	//			$highestColumn = $worksheet->getHighestColumn();	
+	//			for($row=2; $row<=$highestRow; $row++)
+	//			{
+	//				$nopol = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+	//				$keur = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+	//				$tera = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+	//				$pajak = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+	//				$temp_data[] = array(
+	//					'nopol'	=> $nopol,
+	//					'keur'	=> $keur,
+	//					'tera'	=> $tera,
+	//					'pajak'	=> $pajak
+	//				); 	
+	//			}
+	//		}
+	//		$this->load->model('Mobil_model');
+	//		$insert = $this->Mobil_model->insert($temp_data);
+	//		if($insert){
+	//			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-ok"></span> Data Berhasil di Import ke Database');
+	//			redirect($_SERVER['HTTP_REFERER']);
+	//		}else{
+	//			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span> Terjadi Kesalahan');
+	//			redirect($_SERVER['HTTP_REFERER']);
+	//		}
+	//	}else{
+	//		echo "Tidak ada file yang masuk";
+	//	}
+	//}
 }

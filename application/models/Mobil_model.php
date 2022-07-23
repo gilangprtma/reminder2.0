@@ -50,4 +50,11 @@ class Mobil_model extends CI_Model
         $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible show fade" role="alert">Data has been deleted</div>');
         redirect('mobil');
     }
+
+    //public function insert($data){
+	//	$insert = $this->db->insert_batch('mobiltanki', $data);
+	//	if($insert){
+	//		return true;
+//		}
+//	}
 }

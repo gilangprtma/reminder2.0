@@ -6,13 +6,15 @@ class Cron extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        //$this->load->model('Cron_model');
+        $this->load->model('Mobil_model');
         $this->load->helper('tgl_indo');
         $this->load->helper('common');
     }
 
     public function index()
     {
+        $id = $this->input->post('id') ? $this->input->post('id') : 0;
+
         $phone = '';
         $sqlphone = "SELECT * FROM user";
         $queryphone = $this->db->query($sqlphone);
@@ -24,6 +26,18 @@ class Cron extends CI_Controller {
                 }
             }
         }
+
+        //pdf
+        $this->load->library('pdflib');
+        $pdf = new Pdflib('L', 'mm', 'F4', true, 'UTF-8', false);
+        $pdf->AddPage('P', 'F4');
+        $data['mob'] = $this->Mobil_model->getById($id);
+        $html = $this->load->view('cronjob/print', $data, true);
+        $pdf->writeHTML($html, true, false, false, false, '');
+        $fcpatch = 'assets/upload/' . date('Ymd.His') . '.pdf';
+        $url = base_url() . $fcpatch;
+        $pdf->Output(FCPATH . $fcpatch, "F");
+        //end pdf
 
         $sql = "SELECT * FROM cronjob WHERE 1 LIMIT 1";
         $query = $this->db->query($sql);
@@ -39,26 +53,34 @@ class Cron extends CI_Controller {
                 $tanggalKeurPeriode1DB = $v;
                 $tanggalKeurPeriode1 = date('Y-m-d', strtotime('+'.$tanggalKeurPeriode1DB.'days'));
 
-                $querytanki = $this->db->query("SELECT * FROM mobiltanki WHERE keur='$tanggalKeurPeriode1'");
-                if($querytanki->num_rows()>0){
-                    foreach($querytanki->result() as $idx=>$val){
-                        $data_wa = array(
-                            'endpoint' => 'send-message',
-                            'data' => array(
-                                'phone' => $phone,
-                                'message' => 'Assalamualaikum  Wr. Wb, Salam Sejahtera
-                                
-                                Keur Mobil Tanki Nomor '.$val->nopol.' akan habis / tidak berlaku pada tanggal '.$val->keur.', mohon agar segera dilakukan
-                                keur
-                                
-                                Jika dalam waktu yang telah ditentukan keur tidak segera dilakukan, maka Mobil Tanki tersebut tidak dapat
-                                beroperasi.
-                                
-                                Terimakasih'
-                            ),
-                        );
-                        $send_wa = send_wablas($data_wa);
+                $content_length = 0;
+
+                if ($url != '' && $url != NULL) {
+                    $headers = get_headers($url, true);
+
+                    if (isset($headers['Content-Length'])) {
+                        $content_length = $headers['Content-Length'];
                     }
+
+                        $querytanki = $this->db->query("SELECT * FROM mobiltanki WHERE keur='$tanggalKeurPeriode1'");
+                        if($querytanki->num_rows()>0 && $content_length > 0){
+                            foreach($querytanki->result() as $idx=>$val){
+                                $data_wa = array(
+                                    'endpoint' => 'send-message',
+                                    'data' => array(
+                                        'phone' => $phone,
+                                        'message' => 'Assalamualaikum  Wr. Wb, Salam Sejahtera
+                                        Keur Mobil Tanki Nomor '.$val->nopol.' akan habis / tidak berlaku pada tanggal '.$val->keur.', mohon agar segera dilakukan
+                                        keur
+                                        Jika dalam waktu yang telah ditentukan keur tidak segera dilakukan, maka Mobil Tanki tersebut tidak dapat
+                                        beroperasi. 
+                                        Terimakasih
+                                        '.$url.''
+                                    ),
+                                );
+                                $send_wa = send_wablas($data_wa);
+                            }
+                        }
                 }
             }
             //end buat keur
