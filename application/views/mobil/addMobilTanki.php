@@ -7,7 +7,7 @@
                     <div class="card">
                         <form method="POST" action="">
                             <div class="card-header">
-                                <h4>Add Mobil Tanki</h4>
+                                <h4>Tambah Mobil Tanki</h4>
                             </div>
                             <div class="card-body">
                                 <div class="form-row">
@@ -21,8 +21,13 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Transportir</label>
-                                        <input type="text" class="form-control" name="transportir" value="<?= set_value('transportir'); ?>">
-                                        <?= form_error('transportir', '<small class="text-danger pl-3">', '</small>'); ?>
+                                        <select list="id" name="transportir" id="id" class="form-control select2">
+                                            <option value="">Transportir</option>
+                                            <?php foreach ($transportir as $t) : ?>
+                                                <option value="<?= $t['id']; ?>"><?= $t['nama']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <?= form_error('id', '<small class="text-danger pl-3">', '</small>'); ?>
                                     </div>
                                 </div>
                                 <div class="form-row">

@@ -14,6 +14,16 @@ class Mobil_model extends CI_Model
         return $this->db->get_where('mobiltanki', ['id' => $id])->row_array();
     }
 
+    public function getTrans()
+    {
+        $query = "SELECT `transportir`.`id`,`nama`
+        FROM `transportir`
+        WHERE `transportir`.is_active = '1'
+
+        ";
+        return $this->db->query($query)->result_array();
+    }
+
     public function addMobil($data)
     {
         $data = [

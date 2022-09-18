@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/bundles/jqvmap/dist/jqvmap.min.css');?>">
     <link rel="stylesheet" href="<?= base_url('assets/bundles/flag-icon-css/css/flag-icon.min.css');?>">
     <link rel="stylesheet" href="<?= base_url('assets/bundles/fullcalendar/fullcalendar.min.css');?>">
+    <link rel="stylesheet" href="<?= base_url('assets/bundles/select2/dist/css/select2.min.css');?>">
     <!-- Template CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/style.css'); ?>">
     <link rel="stylesheet" href="<?= base_url('assets/css/components.css'); ?>">
@@ -25,7 +26,7 @@
     <script src="<?= base_url('assets/js/page/widget-chart.js');?>"></script>
     <!-- Custom style CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/css/custom.css'); ?>">
-    <link rel='shortcut icon' type='image/x-icon' href='<?= base_url('assets/img/icon2.jpg'); ?>' />
+    <link rel='shortcut icon' type='image/x-icon' href='<?= base_url('assets/img/icon2.png'); ?>' />
     <!--
     Calendar
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css" />

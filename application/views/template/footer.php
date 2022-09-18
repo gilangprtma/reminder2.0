@@ -26,6 +26,7 @@
 <script src="<?= base_url('assets/js/page/datatables.js'); ?>"></script>
 <script src="<?= base_url('assets/js/page/auth-register.js'); ?>"></script>
 <script src="<?= base_url('assets/js/page/calendar.js'); ?>"></script>
+<script src="<?= base_url('assets/bundles/select2/dist/js/select2.full.min.js'); ?>"></script>
 
 <!-- Template JS File -->
 <script src="<?= base_url('assets/js/scripts.js'); ?>"></script>

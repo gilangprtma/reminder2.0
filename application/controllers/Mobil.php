@@ -33,6 +33,8 @@ class Mobil extends CI_Controller {
         $data['title'] = 'Tambah Mobil Tanki';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
+        $data['transportir'] = $this->Mobil_model->getTrans();
+
         $this->form_validation->set_rules('nopol', 'Nopol', 'required|trim');
         $this->form_validation->set_rules('transportir', 'Transportir', 'trim|required');
         $this->form_validation->set_rules('kap', 'Kapasitas', 'required|trim|max_length[2]');
