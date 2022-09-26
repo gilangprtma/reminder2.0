@@ -5,7 +5,11 @@ class Mobil_model extends CI_Model
 {
     public function getListMobil()
     {
-        $query = "SELECT * FROM `mobiltanki` ORDER BY `nopol` ASC";
+        $query = "SELECT m.*, t.`nama` AS nama_transportir
+            FROM `mobiltanki` m
+            JOIN `transportir` t ON m.`transportir` = t.`id`
+            ORDER BY m.`nopol` ASC
+        ";
         return $this->db->query($query)->result_array();
     }
 

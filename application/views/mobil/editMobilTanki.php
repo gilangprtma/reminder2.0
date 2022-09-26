@@ -21,7 +21,12 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label>Transportir</label>
-                                        <input type="text" class="form-control" name="transportir" value="<?= $mt['transportir']; ?>">
+                                        <select list="id" name="transportir" id="id" class="form-control select2">
+                                            <option value="">Transportir</option>
+                                            <?php foreach ($transportir as $t) : ?>
+                                                <option value="<?= $t['id']; ?>" <?php echo ($mt['transportir'] == $t['id'] ? 'selected' : '') ?>><?= $t['nama']; ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                         <?= form_error('transportir', '<small class="text-danger pl-3">', '</small>'); ?>
                                     </div>
                                 </div>
@@ -35,7 +40,7 @@
                                         </small>
                                     </div>
                                     <div class="form-group col-md-6">
-                                    <label>Jenis Produk</label>
+                                        <label>Jenis Produk</label>
                                         <select name="jenis" id="jenis" class="form-control">
                                             <?php foreach ($jenis as $m) : ?>
                                                 <?php if ($m == $mt['jenis']) : ?>
@@ -45,7 +50,7 @@
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
                                         </select>
-                                    <?= form_error('jenis', '<small class="text-danger pl-3">', '</small>'); ?>
+                                        <?= form_error('jenis', '<small class="text-danger pl-3">', '</small>'); ?>
                                     </div>
                                 </div>
                                 <div class="form-row">
