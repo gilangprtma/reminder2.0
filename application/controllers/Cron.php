@@ -13,143 +13,165 @@ class Cron extends CI_Controller {
 
     public function index()
     {
-        $id = $this->input->post('id') ? $this->input->post('id') : 0;
+        $phones = $this->getAdminUser();
 
-        $phone = '';
-        $sqlphone = "SELECT * FROM user";
-        $queryphone = $this->db->query($sqlphone);
-        if($queryphone->num_rows() > 0){
-            foreach($queryphone->result() as $k=>$j){
-                $phone.=$j->phone;
-                if($queryphone->num_rows()!=$k+1){
-                    $phone.=',';
-                }
-            }
+        $sql = "SELECT * FROM cronjob LIMIT 1";
+        $query = $this->db->query($sql);
+
+        if($query->num_rows() == 0){
+            return;
         }
 
-        //pdf
+        $cron = $query->row();
+
+        // ini buat keur
+        $keur = $cron->keur1;
+        $cronKeurInterval = array_map('intval', explode(',', $keur));
+        $this->cronKeur($cronKeurInterval, $phones);
+
+        // ini buat tera
+        $tera = $cron->tera1;
+        $cronTeraInterval = array_map('intval', explode(',', $tera));
+        $this->cronTera($cronTeraInterval, $phones);
+
+        // ini buat pajak
+        $pajak = $cron->pajak1;
+        $cronPajakInterval = array_map('intval', explode(',', $pajak));
+        $this->cronPajak($cronPajakInterval, $phones);
+        
+    }
+
+    private function savePDF($filename, $view, $data = [])
+    {
         $this->load->library('pdflib');
         $pdf = new Pdflib('L', 'mm', 'F4', true, 'UTF-8', false);
         $pdf->AddPage('P', 'F4');
-        $data['mob'] = $this->Mobil_model->getById($id);
-        $html = $this->load->view('cronjob/print', $data, true);
-        $pdf->writeHTML($html, true, false, false, false, '');
-        $fcpatch = 'assets/upload/' . date('Ymd.His') . '.pdf';
-        $url = base_url() . $fcpatch;
-        $pdf->Output(FCPATH . $fcpatch, "F");
-        //end pdf
+        $html = $this->load->view($view, $data, true);
+        $pdf->writeHTML($html);
+        $pdf->Output(FCPATH . $filename, "F");
 
-        $sql = "SELECT * FROM cronjob WHERE 1 LIMIT 1";
-        $query = $this->db->query($sql);
+        return base_url($filename);
+    }
 
-        if($query->num_rows() >0){
-            //ini buat keur
-            $keur = $query->row()->keur1;
-            $keurarr = explode(',',$keur);
+    private function getAdminUser(): array
+    {
+        $phones = [];
+        $sqlphone = "SELECT * FROM user";
+        $userQuery = $this->db->query($sqlphone);
+        if ($userQuery->num_rows() > 0) {
+            foreach ($userQuery->result() as $user) {
+                $phones[] = $user->phone;
+            }
+        }
 
-            foreach ($keurarr as $i=>$v){
-                $date = date('Y-m-d');
-                $tanggalExpired = '2022-07-06';
-                $tanggalKeurPeriode1DB = $v;
-                $tanggalKeurPeriode1 = date('Y-m-d', strtotime('+'.$tanggalKeurPeriode1DB.'days'));
+        return $phones;
+    }
 
-                $content_length = 0;
+    private function cronKeur($intervals = [], $adminPhones = [])
+    {
+        foreach ($intervals as $interval) {
+            $theDay = now_carbon()->addDay($interval)->format('Y-m-d');
 
-                if ($url != '' && $url != NULL) {
-                    $headers = get_headers($url, true);
+            $rows = $this->Mobil_model->getByKeur($theDay);
+            // looping through mobiltanki
+            foreach ($rows as $row) {
+                if ($row) {
+                    $filename = "assets/upload/KEUR{$row->id}{$row->nopol}{$interval}.pdf";
+                    $url = $this->savePDF($filename, 'cronjob/print_new', [
+                        'mobil' => $row,
+                        'kind' => 'keur',
+                        'interval' => $interval,
+                        'tanggal' => now_carbon()->addDay($interval)->translatedFormat('l, d M Y'),
+                    ]);
 
-                    if (isset($headers['Content-Length'])) {
-                        $content_length = $headers['Content-Length'];
-                    }
+                    // send whatsapp
+                    $data_wa = array(
+                        'endpoint' => 'send-message',
+                        'data' => [
+                            'phone' => implode(',', array_merge($adminPhones, [$row->telepon_transportir])),
+                            'message' => $this->load->view('whatsapp/reminder-keur', [
+                                'mobil' => $row,
+                                'tanggal_expired' => $row->keur,
+                                'url' => $url,
+                            ], true),
+                        ],
+                    );
 
-                        $querytanki = $this->db->query("SELECT * FROM mobiltanki WHERE keur='$tanggalKeurPeriode1'");
-                        if($querytanki->num_rows()>0 && $content_length > 0){
-                            foreach($querytanki->result() as $idx=>$val){
-                                $data_wa = array(
-                                    'endpoint' => 'send-message',
-                                    'data' => array(
-                                        'phone' => $phone,
-                                        'message' => 'Assalamualaikum  Wr. Wb, Salam Sejahtera
-                                        Keur Mobil Tanki Nomor '.$val->nopol.' akan habis / tidak berlaku pada tanggal '.$val->keur.', mohon agar segera dilakukan
-                                        keur
-                                        Jika dalam waktu yang telah ditentukan keur tidak segera dilakukan, maka Mobil Tanki tersebut tidak dapat
-                                        beroperasi. 
-                                        Terimakasih
-                                        '.$url.''
-                                    ),
-                                );
-                                $send_wa = send_wablas($data_wa);
-                            }
-                        }
+                    send_wablas($data_wa);
                 }
             }
-            //end buat keur
+        }
+    }
 
-            //ini buat tera
-            $tera = $query->row()->tera1;
-            $teraarr = explode(',',$tera);
+    private function cronTera($intervals = [], $adminPhones = [])
+    {
+        foreach ($intervals as $interval) {
+            $theDay = now_carbon()->addDay($interval)->format('Y-m-d');
 
-            foreach ($teraarr as $u=>$x){
-                $date = date('Y-m-d');
-                $tanggalTeraPeriode1DB = $x;
-                $tanggalTeraPeriode1 = date('Y-m-d', strtotime('+'.$tanggalTeraPeriode1DB.'days'));
+            $rows = $this->Mobil_model->getByTera($theDay);
+            // looping through mobiltanki
+            foreach ($rows as $row) {
+                if ($row) {
+                    $filename = "assets/upload/TERA{$row->id}{$row->nopol}{$interval}.pdf";
+                    $url = $this->savePDF($filename, 'cronjob/print_new', [
+                        'mobil' => $row,
+                        'kind' => 'tera',
+                        'interval' => $interval,
+                        'tanggal' => now_carbon()->addDay($interval)->translatedFormat('l, d M Y'),
+                    ]);
 
-                $querytankitera = $this->db->query("SELECT * FROM mobiltanki WHERE tera='$tanggalTeraPeriode1'");
-                if($querytankitera->num_rows()>0){
-                    foreach($querytankitera->result() as $idu=>$valu){
-                        $data_wa = array(
-                            'endpoint' => 'send-message',
-                            'data' => array(
-                                'phone' => $phone,
-                                'message' => 'Assalamualaikum  Wr. Wb, Salam Sejahtera
-                                
-                                Tera Mobil Tanki Nomor '.$valu->nopol.' akan habis / tidak berlaku pada tanggal '.$valu->tera.', mohon agar segera dilakukan
-                                tera
-                                
-                                Jika dalam waktu yang telah ditentukan keur tidak segera dilakukan, maka Mobil Tanki tersebut tidak dapat
-                                beroperasi.
-                                
-                                Terimakasih'
-                            ),
-                        );
-                        $send_wa = send_wablas($data_wa);
-                    }
+                    // send whatsapp
+                    $data_wa = array(
+                        'endpoint' => 'send-message',
+                        'data' => [
+                            'phone' => implode(',', array_merge($adminPhones, [$row->telepon_transportir])),
+                            'message' => $this->load->view('whatsapp/reminder-tera', [
+                                'mobil' => $row,
+                                'tanggal_expired' => $row->tera,
+                                'url' => $url,
+                            ], true),
+                        ],
+                    );
+
+                    send_wablas($data_wa);
                 }
             }
-            //end buat tera
+        }
+    }
 
-            //ini buat pajak
-            $pajak = $query->row()->pajak1;
-            $pajakarr = explode(',',$pajak);
+    private function cronPajak($intervals = [], $adminPhones = [])
+    {
+        foreach ($intervals as $interval) {
+            $theDay = now_carbon()->addDay($interval)->format('Y-m-d');
 
-            foreach ($pajakarr as $m=>$w){
-                $date = date('Y-m-d');
-                $tanggalPajakPeriode1DB = $w;
-                $tanggalPajakPeriode1 = date('Y-m-d', strtotime('+'.$tanggalPajakPeriode1DB.'days'));
+            $rows = $this->Mobil_model->getByPajak($theDay);
+            // looping through mobiltanki
+            foreach ($rows as $row) {
+                if ($row) {
+                    $filename = "assets/upload/PAJAK{$row->id}{$row->nopol}{$interval}.pdf";
+                    $url = $this->savePDF($filename, 'cronjob/print_new', [
+                        'mobil' => $row,
+                        'kind' => 'pajak',
+                        'interval' => $interval,
+                        'tanggal' => now_carbon()->addDay($interval)->translatedFormat('l, d M Y'),
+                    ]);
 
-                $querytankipajak = $this->db->query("SELECT * FROM mobiltanki WHERE pajak='$tanggalPajakPeriode1'");
-                if($querytankipajak->num_rows()>0){
-                    foreach($querytankipajak->result() as $idm=>$valo){
-                        $data_wa = array(
-                            'endpoint' => 'send-message',
-                            'data' => array(
-                                'phone' => $phone,
-                                'message' => 'Assalamualaikum  Wr. Wb, Salam Sejahtera
-                                
-                                Pajak Mobil Tanki Nomor '.$valo->nopol.' akan habis / tidak berlaku pada tanggal '.$valo->pajak.', mohon agar segera dilakukan
-                                pajak
-                                
-                                Jika dalam waktu yang telah ditentukan keur tidak segera dilakukan, maka Mobil Tanki tersebut tidak dapat
-                                beroperasi.
-                                
-                                Terimakasih'
-                            ),
-                        );
-                        $send_wa = send_wablas($data_wa);
-                    }
+                    // send whatsapp
+                    $data_wa = array(
+                        'endpoint' => 'send-message',
+                        'data' => [
+                            'phone' => implode(',', array_merge($adminPhones, [$row->telepon_transportir])),
+                            'message' => $this->load->view('whatsapp/reminder-pajak', [
+                                'mobil' => $row,
+                                'tanggal_expired' => $row->pajak,
+                                'url' => $url,
+                            ], true),
+                        ],
+                    );
+
+                    send_wablas($data_wa);
                 }
             }
-            //end buat pajak
         }
     }
 }

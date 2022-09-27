@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 if (!function_exists('send_wablas')) {
@@ -47,4 +49,9 @@ if (!function_exists('send_wablas')) {
 
         return $response;
     }
+}
+
+function now_carbon(): Carbon
+{
+    return Carbon::now('GMT+7')->locale('id');
 }
