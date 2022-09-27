@@ -5,8 +5,64 @@ class Mobil_model extends CI_Model
 {
     public function getListMobil()
     {
-        $query = "SELECT * FROM `mobiltanki` ORDER BY `nopol` ASC";
+        $query = "SELECT m.*, t.`nama` AS nama_transportir
+            FROM `mobiltanki` m
+            JOIN `transportir` t ON m.`transportir` = t.`id`
+            ORDER BY m.`nopol` ASC
+        ";
         return $this->db->query($query)->result_array();
+    }
+
+    public function find($id)
+    {
+        $query = "SELECT 
+                m.*, 
+                t.`nama` AS nama_transportir,
+                t.`telepon` AS telepon_transportir
+            FROM `mobiltanki` m
+            JOIN `transportir` t ON m.`transportir` = t.`id`
+            WHERE m.`id` = ?
+        ";
+        return $this->db->query($query, [$id])->row();
+    }
+
+    public function getByKeur($val)
+    {
+        $query = "SELECT 
+                m.*, 
+                t.`nama` AS nama_transportir,
+                t.`telepon` AS telepon_transportir
+            FROM `mobiltanki` m
+            JOIN `transportir` t ON m.`transportir` = t.`id`
+            WHERE m.`keur` = ?
+        ";
+        return $this->db->query($query, [$val])->result();
+    }
+
+    public function getByTera($val)
+    {
+        $query = "SELECT 
+                m.*, 
+                t.`nama` AS nama_transportir,
+                t.`telepon` AS telepon_transportir
+            FROM `mobiltanki` m
+            JOIN `transportir` t ON m.`transportir` = t.`id`
+            WHERE m.`tera` = ?
+        ";
+        return $this->db->query($query, [$val])->result();
+    }
+
+    public function getByPajak($val)
+    {
+        $query = "SELECT 
+                m.*, 
+                t.`nama` AS nama_transportir,
+                t.`telepon` AS telepon_transportir
+            FROM `mobiltanki` m
+            JOIN `transportir` t ON m.`transportir` = t.`id`
+            WHERE m.`pajak` = ?
+        ";
+        return $this->db->query($query, [$val])->result();
     }
 
     public function getById($id)

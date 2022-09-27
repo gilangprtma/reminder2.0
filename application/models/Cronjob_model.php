@@ -19,7 +19,11 @@ class Cronjob_model extends CI_Model
             'tera1' => $tera1,
             'pajak1' => $pajak1
         ];
-        $this->db->insert('cronjob', $data);
+        if(count($this->getCronjob()) == 0) {
+            $this->db->insert('cronjob', $data);
+        } else {
+            $this->db->update('cronjob', $data);
+        }
     }
 
 }

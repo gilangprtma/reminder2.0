@@ -30,7 +30,7 @@
                                         <?php foreach ($listmobil as $m) :?>
                                                 <tr>
                                                     <td><?= $m['nopol']; ?></td>
-                                                    <td><?= $m['transportir']; ?></td>
+                                                    <td><?= $m['nama_transportir']; ?></td>
                                                     <td><?= $m['kap']; ?></td>
                                                     <td><?= date('d F Y', strtotime($m['tera'])); ?></td>
                                                     <td><?= date('d F Y', strtotime($m['keur'])); ?></td>

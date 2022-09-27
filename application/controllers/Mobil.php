@@ -65,6 +65,8 @@ class Mobil extends CI_Controller {
         $data['mt'] = $this->Mobil_model->getById($id);
         $data['jenis'] = ['Multi Produk', 'Pertashop', 'Industri', 'Avtur'];
 
+        $data['transportir'] = $this->Mobil_model->getTrans();
+
         $this->form_validation->set_rules('nopol', 'Nopol', 'required|trim');
         $this->form_validation->set_rules('transportir', 'Transportir', 'trim|required');
         $this->form_validation->set_rules('kap', 'Kapasitas', 'required|trim|max_length[2]');
