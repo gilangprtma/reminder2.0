@@ -1,8 +1,16 @@
-Assalamualaikum Wr. Wb, Salam Sejahtera
+SELAMAT PAGI, SALAM SEHAT
 
-Pajak Mobil Tanki Nomor <?php echo $mobil->nopol ?> akan habis / tidak berlaku pada tanggal <?php echo $tanggal_expired ?>, mohon agar segera dilakukan pajak
-Jika dalam waktu yang telah ditentukan pajak tidak segera dilakukan, maka Mobil Tanki tersebut tidak dapat beroperasi.
+BERSAMA INI KAMU INFORMASIKAN MOBIL TANKI YANG AKAN SEGERA HABIS / EXPIRED MASA BERLAKU PAJAK :
 
-Terimakasih
+NOPOL MT : <?= $mobil->nopol; ?>   
+TRANSPORTIR : <?= $mobil->nama_transportir; ?>   
+KAPASITAS : <?= $mobil->kap; ?> KL   
+TANGGAL EXPIRED : <?= $tanggal_expired; ?>   
+
+
+MOHON BANTUAN UNTUK DAPAT DIPERSIAPKAN DAN DIKOORDINASIKAN DENGAN MITRA KERJA DAN FUNGSI TERKAIT AGAR KEGIATAN PENYALURAN BBM / BBK DAPAT BERJALAN DENGAN OPTIMAL.
+
+TERIMAKASIH
+
 
 <?php echo $url ?>

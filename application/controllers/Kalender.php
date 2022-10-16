@@ -29,13 +29,12 @@ class Kalender extends CI_Controller
     public function load()
     {
         $event_data = $this->Kalender_model->fetch_all_event();
-        foreach($event_data->result_array() as $row)
-        {
-        $data[] = array(
-            'id' => $row['id'],
-            'title' => $row['nopol'],
-            'start' => $row['keur']
-        );
+        foreach ($event_data->result_array() as $row) {
+            $data[] = array(
+                'id' => $row['id'],
+                'title' => $row['nopol'],
+                'start' => $row['keur']
+            );
         }
         echo json_encode($data);
     }

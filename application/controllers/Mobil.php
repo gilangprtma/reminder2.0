@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mobil extends CI_Controller {
+class Mobil extends CI_Controller
+{
 
     public function __construct()
     {
@@ -22,7 +23,7 @@ class Mobil extends CI_Controller {
 
         $this->load->view('template/header', $data);
         $this->load->view('template/head', $data);
-        $this->load->view('mobil/index',$data);
+        $this->load->view('mobil/index', $data);
         $this->load->view('template/sidebar');
         $this->load->view('template/foot');
         $this->load->view('template/footer');
@@ -95,38 +96,38 @@ class Mobil extends CI_Controller {
     }
 
     //public function import_excel(){
-	//	if (isset($_FILES["fileExcel"]["name"])) {
-	//		$path = $_FILES["fileExcel"]["tmp_name"];
-	//		$object = PHPExcel_IOFactory::load($path);
-	//		foreach($object->getWorksheetIterator() as $worksheet)
-	//		{
-	//			$highestRow = $worksheet->getHighestRow();
-	//			$highestColumn = $worksheet->getHighestColumn();	
-	//			for($row=2; $row<=$highestRow; $row++)
-	//			{
-	//				$nopol = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
-	//				$keur = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
-	//				$tera = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
-	//				$pajak = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
-	//				$temp_data[] = array(
-	//					'nopol'	=> $nopol,
-	//					'keur'	=> $keur,
-	//					'tera'	=> $tera,
-	//					'pajak'	=> $pajak
-	//				); 	
-	//			}
-	//		}
-	//		$this->load->model('Mobil_model');
-	//		$insert = $this->Mobil_model->insert($temp_data);
-	//		if($insert){
-	//			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-ok"></span> Data Berhasil di Import ke Database');
-	//			redirect($_SERVER['HTTP_REFERER']);
-	//		}else{
-	//			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span> Terjadi Kesalahan');
-	//			redirect($_SERVER['HTTP_REFERER']);
-	//		}
-	//	}else{
-	//		echo "Tidak ada file yang masuk";
-	//	}
-	//}
+    //	if (isset($_FILES["fileExcel"]["name"])) {
+    //		$path = $_FILES["fileExcel"]["tmp_name"];
+    //		$object = PHPExcel_IOFactory::load($path);
+    //		foreach($object->getWorksheetIterator() as $worksheet)
+    //		{
+    //			$highestRow = $worksheet->getHighestRow();
+    //			$highestColumn = $worksheet->getHighestColumn();	
+    //			for($row=2; $row<=$highestRow; $row++)
+    //			{
+    //				$nopol = $worksheet->getCellByColumnAndRow(0, $row)->getValue();
+    //				$keur = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+    //				$tera = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+    //				$pajak = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+    //				$temp_data[] = array(
+    //					'nopol'	=> $nopol,
+    //					'keur'	=> $keur,
+    //					'tera'	=> $tera,
+    //					'pajak'	=> $pajak
+    //				); 	
+    //			}
+    //		}
+    //		$this->load->model('Mobil_model');
+    //		$insert = $this->Mobil_model->insert($temp_data);
+    //		if($insert){
+    //			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-ok"></span> Data Berhasil di Import ke Database');
+    //			redirect($_SERVER['HTTP_REFERER']);
+    //		}else{
+    //			$this->session->set_flashdata('status', '<span class="glyphicon glyphicon-remove"></span> Terjadi Kesalahan');
+    //			redirect($_SERVER['HTTP_REFERER']);
+    //		}
+    //	}else{
+    //		echo "Tidak ada file yang masuk";
+    //	}
+    //}
 }

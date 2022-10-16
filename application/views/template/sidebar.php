@@ -1,7 +1,7 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-        <a href="<?= base_url('home');?>"> <img alt="image" src="<?= base_url('assets/img/logo_pertamina.png'); ?>" class="header-logo" />
+        <a href="<?= base_url('home');?>"> <img alt="image" src="<?= base_url('assets/img/patra.png'); ?>" class="header-logo" />
         </a>
         </div>
         <ul class="sidebar-menu">

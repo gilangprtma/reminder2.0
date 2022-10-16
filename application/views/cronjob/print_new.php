@@ -17,7 +17,7 @@
       font-style: normal;
       font-weight: bold;
       text-decoration: none;
-      font-size: 187pt;
+      font-size: 50pt;
     }
 
     h2 {
@@ -26,7 +26,7 @@
       font-style: normal;
       font-weight: bold;
       text-decoration: none;
-      font-size: 76pt;
+      font-size: 20pt;
     }
 
     p {
@@ -35,28 +35,30 @@
       font-style: normal;
       font-weight: bold;
       text-decoration: none;
-      font-size: 46pt;
+      font-size: 12pt;
       margin: 0pt;
     }
   </style>
 </head>
 
 <body>
-  <h1 style="padding-left: 169pt;text-indent: 0pt;line-height: 212pt;text-align: center;"><?php echo $interval ?></h1>
-  <h2 style="padding-top: 5pt;padding-left: 169pt;text-indent: 0pt;text-align: center;">HARI</h2>
+  <img style="width:150px;" float="right;" src="<?= base_url('assets/img/patra.png'); ?>">
+  <p style="padding-top: 5pt;padding-left: 93pt;text-indent: 0pt;text-align: center;">
+    <span style=" color: #785732; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 30pt;">Reminder</span>
+  </p>
+  <h1 style="padding-left: 169pt;text-indent: 0pt;line-height: 60pt;text-align: center;"><?php echo $interval ?></h1>
+  <h2 style="padding-top: 5pt;padding-left: 169pt;text-indent: 0pt;text-align: center;">HARI LAGI</h2>
   <p style="padding-top: 13pt;padding-left: 183pt;text-indent: 0pt;text-align: center;"><?php echo $tanggal ?></p>
   <p style="text-indent: 0pt;text-align: center;">
+    MOBIL TANGKI
     <?php echo $mobil->nopol ?>
     <br />
   </p>
-  <p style="padding-top: 15pt;padding-left: 93pt;text-indent: 0pt;text-align: center;">
-    <span style=" color: #785732; font-family:Arial, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 92.5pt;">Reminder</span>
-  </p>
   <p style="padding-left: 115pt;text-indent: 0pt;line-height: 93%;text-align: center;">
-    <span style=" color: #785732; font-family:Calibri, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 39.5pt;">Masa berlaku <?php echo $kind ?> Anda akan habis. Mohon segera lakukan uji <?php echo $kind ?> sebelum masa berlaku habis.</span>
+    <span style=" color: #785732; font-family:Calibri, sans-serif; font-style: normal; font-weight: normal; text-decoration: none;">MASA BERLAKU <?php echo $kind ?> MOBIL TANKI <?php echo $mobil->nopol ?> AKAN HABIS / TIDAK BERLAKU. MOHON UNTUK DAPAT SEGERA DILAKUKAN PROSES PERPANJANGAN MASA BERLAKU <?php echo $kind ?>.</span>
   </p>
-  <p style="padding-left: 93pt;text-indent: 0pt;line-height: 43pt;text-align: justify;">
-    <span style=" color: #785732; font-family:Calibri, sans-serif; font-style: normal; font-weight: normal; text-decoration: none; font-size: 39.5pt;">Jika dalam waktu yang telah ditentukan belum dilakukan uji <?php echo $kind ?>, mobil tanki tersebut tidak dapat melakukan operasional di Fuel Terminal Rewulu</span>
+  <p style="padding-left: 93pt;text-indent: 0pt;line-height: 93%;text-align: center;">
+    <span style=" color: #785732; font-family:Calibri, sans-serif; font-style: normal; font-weight: normal; text-decoration: none;">APABILA SAMPAI TANGGAL TERSEBUT BELUM ADA DOKUMEN TERBARU, MAKA MOBIL TANKI <?php echo $mobil->nopol ?> TIDAK DAPAT DIOPERASIKAN UNTUK PENYALURAN BBM / BBK DARI FUEL TERMINAL REWULU KEPADA CUSTOMER.</span>
   </p>
   <p style="padding-left: 5pt;text-indent: 0pt;text-align: left;"></p>
 </body>

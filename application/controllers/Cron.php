@@ -88,8 +88,23 @@ class Cron extends CI_Controller {
                     $data_wa = array(
                         'endpoint' => 'send-message',
                         'data' => [
-                            'phone' => implode(',', array_merge($adminPhones, [$row->telepon_transportir])),
+                            'phone' => implode(',', $adminPhones),
                             'message' => $this->load->view('whatsapp/reminder-keur', [
+                                'mobil' => $row,
+                                'tanggal_expired' => $row->keur,
+                                'url' => $url,
+                            ], true),
+                        ],
+                    );
+
+                    send_wablas($data_wa);
+
+                    // send whatsapp transportir
+                    $data_wa = array(
+                        'endpoint' => 'send-message',
+                        'data' => [
+                            'phone' => implode(',', [$row->telepon_transportir]),
+                            'message' => $this->load->view('whatsapp/reminder-transportir', [
                                 'mobil' => $row,
                                 'tanggal_expired' => $row->keur,
                                 'url' => $url,
@@ -124,8 +139,23 @@ class Cron extends CI_Controller {
                     $data_wa = array(
                         'endpoint' => 'send-message',
                         'data' => [
-                            'phone' => implode(',', array_merge($adminPhones, [$row->telepon_transportir])),
+                            'phone' => implode(',', $adminPhones),
                             'message' => $this->load->view('whatsapp/reminder-tera', [
+                                'mobil' => $row,
+                                'tanggal_expired' => $row->tera,
+                                'url' => $url,
+                            ], true),
+                        ],
+                    );
+
+                    send_wablas($data_wa);
+
+                    // send whatsapp transportir
+                    $data_wa = array(
+                        'endpoint' => 'send-message',
+                        'data' => [
+                            'phone' => implode(',', [$row->telepon_transportir]),
+                            'message' => $this->load->view('whatsapp/reminder-transportir', [
                                 'mobil' => $row,
                                 'tanggal_expired' => $row->tera,
                                 'url' => $url,
@@ -160,8 +190,23 @@ class Cron extends CI_Controller {
                     $data_wa = array(
                         'endpoint' => 'send-message',
                         'data' => [
-                            'phone' => implode(',', array_merge($adminPhones, [$row->telepon_transportir])),
+                            'phone' => implode(',', $adminPhones),
                             'message' => $this->load->view('whatsapp/reminder-pajak', [
+                                'mobil' => $row,
+                                'tanggal_expired' => $row->pajak,
+                                'url' => $url,
+                            ], true),
+                        ],
+                    );
+
+                    send_wablas($data_wa);
+
+                    // send whatsapp transportir
+                    $data_wa = array(
+                        'endpoint' => 'send-message',
+                        'data' => [
+                            'phone' => implode(',', [$row->telepon_transportir]),
+                            'message' => $this->load->view('whatsapp/reminder-transportir', [
                                 'mobil' => $row,
                                 'tanggal_expired' => $row->pajak,
                                 'url' => $url,
